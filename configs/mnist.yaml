@@ -1,0 +1,25 @@
+trainer:
+  name: ImageClassificationTrainer
+  num_epochs: 20
+
+dataset:
+  name: MNISTDataloader
+  root: data
+  batch_size: 32
+  num_workers: 0
+
+model:
+  name: LeNet
+
+optimizer:
+  name: Adam
+  lr: 1.e-3
+
+scheduler:
+  name: StepLR
+  step_size: 10
+
+log_params:
+  batch_size: $dataset.batch_size
+  model_name: $model.name
+  learning_rate: $optimizer.lr
