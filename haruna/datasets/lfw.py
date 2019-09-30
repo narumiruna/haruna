@@ -7,8 +7,15 @@ import mlconfig
 from torch.utils.data import DataLoader, Dataset, SubsetRandomSampler
 from torchvision.datasets.folder import pil_loader
 from torchvision.datasets.utils import download_and_extract_archive
+from torchvision.transforms.functional import to_pil_image, to_tensor
 
-from .. import transforms
+
+def _load_target(path):
+    pic = pil_loader(path)
+    tensor = to_tensor(pic)
+    tensor = tensor[[2, 0, 1], :, :]  # background first
+    tensor = tensor.argmax(dim=0).int()
+    return to_pil_image(tensor)
 
 
 class LFW(Dataset):
@@ -49,7 +56,7 @@ class LFW(Dataset):
     def __getitem__(self, index):
         image_path, target_path = self.samples[index]
         image = pil_loader(image_path)
-        target = pil_loader(target_path)
+        target = _load_target(target_path)
 
         if self.transform is not None:
             image, target = self.transform(image, target)

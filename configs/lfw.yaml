@@ -10,8 +10,6 @@ dataset:
 
 transform:
   name: LFWTransform
-  mean: [0.433922, 0.374727, 0.332006]
-  std: [0.297252, 0.272523, 0.266515]
 
 model:
   name: deeplabv3_resnet50
