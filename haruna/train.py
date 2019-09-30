@@ -5,8 +5,6 @@ import mlflow
 import numpy as np
 import torch
 
-import haruna
-
 
 def parse_args():
     parser = argparse.ArgumentParser()
