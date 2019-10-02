@@ -5,7 +5,7 @@ RUN conda install -y -c conda-forge opencv \
 
 RUN pip uninstall -y pillow \
     && pip install pillow-simd \
-    && pip install mlconfig mlflow tqdm \
+    && pip install mlconfig mlflow scipy torchfile tqdm \
     && rm -rf ~/.cache/pip
 
 WORKDIR /workspace
