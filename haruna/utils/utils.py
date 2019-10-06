@@ -1,5 +1,6 @@
 import json
 import os
+from collections.abc import Sequence
 
 import yaml
 from torch import distributed
@@ -16,10 +17,8 @@ def save_yaml(data, f, **kwargs):
 
 
 def load_json(f):
-    data = None
     with open(f, 'r') as fp:
-        data = json.load(fp)
-    return data
+        return json.load(fp)
 
 
 def save_json(data, f, **kwargs):
@@ -33,3 +32,24 @@ def distributed_is_initialized():
         if distributed.is_initialized():
             return True
     return False
+
+
+def isextension(f, ext):
+    if not isinstance(ext, Sequence):
+        ext = (ext,)
+
+    return os.path.splitext(f)[1] in ext
+
+
+def find_ext(top, ext):
+    paths = []
+
+    for root, _, files in os.walk(top):
+        for f in files:
+            if not isextension(f, ext):
+                continue
+
+            path = os.path.join(root, f)
+            paths.append(path)
+
+    return paths

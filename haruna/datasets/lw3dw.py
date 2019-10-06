@@ -4,22 +4,12 @@ import torch
 import torchfile
 from torch.utils.data import DataLoader, Dataset
 from torchvision.datasets.folder import pil_loader
-from torchvision.datasets.utils import (download_file_from_google_drive, extract_archive)
+from torchvision.datasets.utils import download_file_from_google_drive, extract_archive
 from tqdm import tqdm
 
 from ..transforms.aflw import ToTensor
+from ..utils import find_ext
 from .utils import get_train_valid_split_sampler
-
-
-def find_all(top, ext='.t7'):
-    paths = []
-    for root, _, files in os.walk(top):
-        for f in files:
-            if not f.endswith(ext):
-                continue
-            path = os.path.join(root, f)
-            paths.append(path)
-    return paths
 
 
 class LS3DW(Dataset):
@@ -54,7 +44,7 @@ class LS3DW(Dataset):
     def prepare(self):
         samples = []
 
-        paths = find_all(os.path.join(self.root, 'LS3D-W'), ext='.t7')
+        paths = find_ext(os.path.join(self.root, 'LS3D-W'), ext='.t7')
         for path in tqdm(paths):
             name = os.path.splitext(path)[0]
 

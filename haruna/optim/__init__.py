@@ -1,4 +1,4 @@
-import mlconfig
+import mlconfig.torch
 
 from .rmsprop import TFRMSprop
 
