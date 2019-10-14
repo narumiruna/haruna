@@ -8,44 +8,52 @@ import torch.nn.functional as F
 from tqdm import tqdm, trange
 
 from ..metrics import Accuracy, Average
-from .trainer import AbstractTrainer
+from .trainer import Trainer
 
 
 @mlconfig.register
-class ImageClassificationTrainer(AbstractTrainer):
+class ImageClassificationTrainer(Trainer):
 
     def __init__(self, config, device, num_epochs):
+        super(ImageClassificationTrainer, self).__init__()
+
+        model = config.model()
+        model.to(device)
+        optimizer = config.optimizer(model.parameters())
+        scheduler = config.scheduler(optimizer)
+        train_loader = config.dataset(train=True)
+        valid_loader = config.dataset(train=False)
+
         self.device = device
-        self.model = config.model()
-        self.model.to(self.device)
-        self.optimizer = config.optimizer(self.model.parameters())
-        self.scheduler = config.scheduler(self.optimizer)
-        self.train_loader = config.dataset(train=True)
-        self.test_loader = config.dataset(train=False)
+        self.model = model
+        self.optimizer = optimizer
+        self.scheduler = scheduler
+        self.train_loader = train_loader
+        self.valid_loader = valid_loader
         self.num_epochs = num_epochs
 
-        self.epoch = 1
-        self.best_acc = 0
+        self.register_status('epoch', 1)
+        self.register_status('best_acc', 0)
         self.temp_dir = tempfile.gettempdir()
 
     def fit(self):
         for self.epoch in trange(self.epoch, self.num_epochs + 1):
             train_loss, train_acc = self.train()
-            test_loss, test_acc = self.evaluate()
+            valid_loss, valid_acc = self.evaluate()
             self.scheduler.step()
 
             self.save_checkpoint(os.path.join(self.temp_dir, 'checkpoint.pth'))
 
             metrics = dict(train_loss=train_loss.value,
                            train_acc=train_acc.value,
-                           test_loss=test_loss.value,
-                           test_acc=test_acc.value)
+                           valid_loss=valid_loss.value,
+                           valid_acc=valid_acc.value)
             mlflow.log_metrics(metrics, step=self.epoch)
 
             format_string = 'Epoch: {}/{}, '.format(self.epoch, self.num_epochs)
             format_string += 'train loss: {}, train acc: {}, '.format(train_loss, train_acc)
-            format_string += 'test loss: {}, test acc: {}, '.format(test_loss, test_acc)
-            format_string += 'best test acc: {}.'.format(self.best_acc)
+            format_string += 'valid loss: {}, valid acc: {}, '.format(valid_loss, valid_acc)
+            format_string += 'best valid acc: {}.'.format(self.best_acc)
             tqdm.write(format_string)
 
     def train(self):
@@ -70,54 +78,39 @@ class ImageClassificationTrainer(AbstractTrainer):
 
         return train_loss, train_acc
 
+    @torch.no_grad()
     def evaluate(self):
         self.model.eval()
 
-        test_loss = Average()
-        test_acc = Accuracy()
+        eval_loss = Average()
+        eval_acc = Accuracy()
 
-        with torch.no_grad():
-            for x, y in tqdm(self.test_loader):
-                x = x.to(self.device)
-                y = y.to(self.device)
+        for x, y in tqdm(self.valid_loader):
+            x = x.to(self.device)
+            y = y.to(self.device)
 
-                output = self.model(x)
-                loss = F.cross_entropy(output, y)
+            output = self.model(x)
+            loss = F.cross_entropy(output, y)
 
-                test_loss.update(loss.item(), number=x.size(0))
-                test_acc.update(output, y)
+            eval_loss.update(loss.item(), number=x.size(0))
+            eval_acc.update(output, y)
 
-        if test_acc > self.best_acc:
-            self.best_acc = test_acc
+        if eval_acc > self.best_acc:
+            self.best_acc = eval_acc
             self.save_model(os.path.join(self.temp_dir, 'best.pth'))
 
-        return test_loss, test_acc
+        return eval_loss, eval_acc
 
     def save_model(self, f):
-        self.model.eval()
-
         torch.save(self.model.state_dict(), f)
         mlflow.log_artifact(f)
 
     def save_checkpoint(self, f):
-        self.model.eval()
-
-        checkpoint = {
-            'model': self.model.state_dict(),
-            'optimizer': self.optimizer.state_dict(),
-            'scheduler': self.scheduler.state_dict(),
-            'epoch': self.epoch,
-            'best_acc': self.best_acc
-        }
-
-        torch.save(checkpoint, f)
+        state_dict = self.state_dict()
+        torch.save(state_dict, f)
         mlflow.log_artifact(f)
 
     def resume(self, f):
-        checkpoint = torch.load(f, map_location=self.device)
-
-        self.model.load_state_dict(checkpoint['model'])
-        self.optimizer.load_state_dict(checkpoint['optimizer'])
-        self.scheduler.load_state_dict(checkpoint['scheduler'])
-        self.epoch = checkpoint['epoch'] + 1
-        self.best_acc = checkpoint['best_acc']
+        state_dict = torch.load(f, map_location=self.device)
+        self.load_state_dict(state_dict)
+        self.epoch += 1

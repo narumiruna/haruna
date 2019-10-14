@@ -22,7 +22,6 @@ def load_json(f):
 
 
 def save_json(data, f, **kwargs):
-    os.makedirs(os.path.dirname(f), exist_ok=True)
     with open(f, 'w') as fp:
         json.dump(data, fp, **kwargs)
 
