@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from collections import OrderedDict
 
-import torch
 from torch.nn import Module
 from torch.optim import Optimizer
 from torch.optim.lr_scheduler import _LRScheduler
