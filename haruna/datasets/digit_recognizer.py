@@ -1,23 +1,21 @@
 import os
 
+import mlconfig
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 from torchvision.transforms.functional import to_pil_image
 
+from .utils import get_train_valid_split_sampler
+
 
 class DigitRecognizer(Dataset):
 
-    def __init__(self, root='data/digit-recognizer', train=True, transform=None):
+    def __init__(self, root='data/digit-recognizer', transform=None):
         self.root = root
-        self.train = train
         self.transform = transform
-
-        if train:
-            self.df = pd.read_csv(os.path.join(root, 'train.csv'))
-        else:
-            self.df = pd.read_csv(os.path.join(root, 'test.csv'))
+        self.df = pd.read_csv(os.path.join(root, 'train.csv'))
 
     def __getitem__(self, index):
         tensor = torch.tensor(self.df.iloc[index][1:], dtype=torch.uint8).view(28, 28)
@@ -33,28 +31,18 @@ class DigitRecognizer(Dataset):
         return self.df.shape[0]
 
 
+@mlconfig.register
 class DigitRecognizerLoader(DataLoader):
 
-    def __init__(self, root, train, size=32, shuffle=True, **kwargs):
+    def __init__(self, root, train=True, size=32, batch_size=32, valid_ratio=0.1, **kwargs):
         transform = transforms.Compose([
             transforms.Resize(size),
             transforms.ToTensor(),
         ])
-        dataset = DigitRecognizer(root, train, transform=transform)
-        super(DigitRecognizerLoader, self).__init__(dataset, shuffle=shuffle, **kwargs)
-
-
-def main():
-    from torchvision.utils import save_image
-
-    loader = DigitRecognizerLoader(root='data/digit-recognizer', train=True, batch_size=32)
-
-    x, y = next(iter(loader))
-
-    print(x.size())
-    print(y.size())
-    save_image(x, 'test.jpg')
-
-
-if __name__ == '__main__':
-    main()
+        dataset = DigitRecognizer(root, transform=transform)
+        sampler = get_train_valid_split_sampler(dataset, valid_ratio, train)
+        super(DigitRecognizerLoader, self).__init__(dataset,
+                                                    batch_size=batch_size,
+                                                    sampler=sampler,
+                                                    shuffle=False,
+                                                    **kwargs)
