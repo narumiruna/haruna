@@ -72,5 +72,5 @@ class Trainer(AbstractTrainer):
     def state_dict(self):
         return {
             'modules': {k: v.state_dict() for k, v in self.modules.items()},
-            'status': {k: v for k, v in self.status.items()}
+            'status': self.status
         }
