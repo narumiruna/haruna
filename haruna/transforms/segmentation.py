@@ -8,6 +8,7 @@ from PIL import Image
 
 # https://github.com/pytorch/vision/blob/master/references/segmentation/transforms.py
 
+
 class Compose(T.Compose):
 
     def __call__(self, img, target):
@@ -61,4 +62,12 @@ class RandomResizeCrop(T.RandomResizedCrop):
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
         img = F.resized_crop(img, i, j, h, w, self.size, self.interpolation)
         target = F.resized_crop(target, i, j, h, w, self.size, Image.NEAREST)
+        return img, target
+
+
+class Resize(T.Resize):
+
+    def __call__(self, img, target):
+        img = F.resize(img, self.size, interpolation=self.interpolation)
+        target = F.resize(target, self.size, interpolation=Image.NEAREST)
         return img, target
