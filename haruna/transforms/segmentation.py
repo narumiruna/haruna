@@ -71,3 +71,9 @@ class Resize(T.Resize):
         img = F.resize(img, self.size, interpolation=self.interpolation)
         target = F.resize(target, self.size, interpolation=Image.NEAREST)
         return img, target
+
+
+class ColorJitter(T.ColorJitter):
+
+    def __call__(self, img, target):
+        return super(ColorJitter, self).__call__(img), target
