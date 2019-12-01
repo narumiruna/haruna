@@ -11,19 +11,10 @@ from ..metrics import Accuracy, Average
 from .trainer import Trainer
 
 
-@mlconfig.register
 class ImageClassificationTrainer(Trainer):
 
-    def __init__(self, config, device, num_epochs):
+    def __init__(self, device, model, optimizer, scheduler, train_loader, valid_loader, num_epochs):
         super(ImageClassificationTrainer, self).__init__()
-
-        model = config.model()
-        model.to(device)
-        optimizer = config.optimizer(model.parameters())
-        scheduler = config.scheduler(optimizer)
-        train_loader = config.dataset(train=True)
-        valid_loader = config.dataset(train=False)
-
         self.device = device
         self.model = model
         self.optimizer = optimizer
@@ -114,3 +105,17 @@ class ImageClassificationTrainer(Trainer):
         state_dict = torch.load(f, map_location=self.device)
         self.load_state_dict(state_dict)
         self.epoch += 1
+
+
+@mlconfig.register
+def train_image_classification(config, device, num_epochs):
+    model = config.model()
+    model.to(device)
+    optimizer = config.optimizer(model.parameters())
+    scheduler = config.scheduler(optimizer)
+    train_loader = config.dataset(train=True)
+    valid_loader = config.dataset(train=False)
+
+    trainer = ImageClassificationTrainer(device, model, optimizer, scheduler, train_loader, valid_loader, num_epochs)
+
+    return trainer

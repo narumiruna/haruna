@@ -1,5 +1,5 @@
 trainer:
-  name: ImageClassificationTrainer
+  name: train_image_classification
   num_epochs: 20
 
 dataset:
