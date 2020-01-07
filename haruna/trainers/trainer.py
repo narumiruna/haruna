@@ -1,4 +1,3 @@
-from abc import ABCMeta, abstractmethod
 from collections import OrderedDict
 
 from torch.nn import Module
@@ -6,22 +5,7 @@ from torch.optim import Optimizer
 from torch.optim.lr_scheduler import _LRScheduler
 
 
-class AbstractTrainer(metaclass=ABCMeta):
-
-    @abstractmethod
-    def fit(self):
-        raise NotImplementedError
-
-    @abstractmethod
-    def train(self):
-        raise NotImplementedError
-
-    @abstractmethod
-    def evaluate(self):
-        raise NotImplementedError
-
-
-class Trainer(AbstractTrainer):
+class Trainer(object):
 
     def __init__(self):
         self.modules = OrderedDict()
@@ -74,3 +58,12 @@ class Trainer(AbstractTrainer):
             'modules': {k: v.state_dict() for k, v in self.modules.items()},
             'status': self.status
         }
+
+    def fit(self):
+        raise NotImplementedError
+
+    def train(self):
+        raise NotImplementedError
+
+    def evaluate(self):
+        raise NotImplementedError

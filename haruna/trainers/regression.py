@@ -8,11 +8,10 @@ import torch.nn.functional as F
 from tqdm import tqdm, trange
 
 from ..metrics import Average, R2Score
-from .trainer import AbstractTrainer
 
 
 @mlconfig.register
-class ImageRegressionTrainer(AbstractTrainer):
+class ImageRegressionTrainer(object):
 
     def __init__(self, config, device, num_epochs):
         model = config.model()

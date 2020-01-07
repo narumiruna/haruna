@@ -9,11 +9,10 @@ from torchvision.utils import save_image
 from tqdm import tqdm, trange
 
 from ..metrics import Accuracy, Average
-from .trainer import AbstractTrainer
 
 
 @mlconfig.register
-class LFWTrainer(AbstractTrainer):
+class LFWTrainer(object):
 
     def __init__(self, config, device, num_epochs):
         model = config.model()
