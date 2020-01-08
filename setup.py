@@ -14,9 +14,10 @@ def main():
 
     setup(
         name='haruna',
-        version='0.0.0',
         author='Narumi',
         author_email='weaper@gamil.com',
+        use_scm_version=True,
+        setup_requires=['setuptools_scm'],
         packages=find_packages(),
         install_requires=requirements,
     )
