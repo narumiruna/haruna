@@ -1,4 +1,3 @@
-mlconfig
 mlflow
 scipy
 torch==1.2.0
