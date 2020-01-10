@@ -1,6 +1,6 @@
 mlflow
 scipy
-torch==1.2.0
+torch
 torchfile
 torchvision
 tqdm
