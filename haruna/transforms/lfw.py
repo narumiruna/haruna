@@ -1,9 +1,9 @@
-import mlconfig
+
 
 from .segmentation import Compose, Normalize, RandomRotation, RandomVerticalFlip, ToTensor
 
 
-@mlconfig.register
+
 class LFWTransform(object):
 
     def __init__(self, degrees=15):

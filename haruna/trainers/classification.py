@@ -1,7 +1,7 @@
 import os
 import tempfile
 
-import mlconfig
+
 import mlflow
 import torch
 import torch.nn.functional as F
@@ -107,7 +107,7 @@ class ImageClassificationTrainer(Trainer):
         self.epoch += 1
 
 
-@mlconfig.register
+
 def train_image_classification(config, device, num_epochs):
     model = config.model()
     model.to(device)

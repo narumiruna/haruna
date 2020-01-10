@@ -1,7 +1,7 @@
 import os
 import tempfile
 
-import mlconfig
+
 import mlflow
 import torch
 import torch.nn.functional as F
@@ -10,7 +10,7 @@ from tqdm import tqdm, trange
 from ..metrics import Average, R2Score
 
 
-@mlconfig.register
+
 class ImageRegressionTrainer(object):
 
     def __init__(self, config, device, num_epochs):

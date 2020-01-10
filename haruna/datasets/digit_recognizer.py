@@ -1,6 +1,6 @@
 import os
 
-import mlconfig
+
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -31,7 +31,7 @@ class DigitRecognizer(Dataset):
         return self.df.shape[0]
 
 
-@mlconfig.register
+
 class DigitRecognizerLoader(DataLoader):
 
     def __init__(self, root, train=True, size=32, batch_size=32, valid_ratio=0.1, **kwargs):

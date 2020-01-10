@@ -1,7 +1,7 @@
 import os
 from glob import glob
 
-import mlconfig
+
 import numpy as np
 import torch
 from PIL import Image
@@ -118,7 +118,7 @@ class CelebAMaskHQTransform(object):
         return self.transform(img, target)
 
 
-@mlconfig.register
+
 class CelebAMaskHQLoader(DataLoader):
 
     def __init__(self, root, train=True, download=False, label_list=None, image_size=64, valid_ratio=0.1, **kwargs):

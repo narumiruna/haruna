@@ -1,7 +1,7 @@
 import os
 import warnings
 
-import mlconfig
+
 from PIL import Image
 from torch.utils import data
 from torchvision import datasets, transforms
@@ -9,7 +9,7 @@ from torchvision import datasets, transforms
 from ..utils import distributed_is_initialized
 
 
-@mlconfig.register
+
 class ImageNetLoader(data.DataLoader):
 
     def __init__(self, root: str, image_size: int, train: bool, batch_size: int, **kwargs):

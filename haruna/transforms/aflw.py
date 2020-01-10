@@ -1,4 +1,4 @@
-import mlconfig
+
 import torchvision.transforms as T
 import torchvision.transforms.functional as F
 
@@ -44,7 +44,7 @@ class Resize(T.Resize):
         return F.resize(img, self.size, self.interpolation), target
 
 
-@mlconfig.register
+
 class AFLW2000Transform(object):
 
     def __init__(self, size=224):

@@ -1,7 +1,7 @@
 import os
 from glob import glob
 
-import mlconfig
+
 import scipy.io
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -40,7 +40,7 @@ def _crop_by_landmarks(img, target, scale=1.1):
     return img, target
 
 
-@mlconfig.register
+
 class AFLW2000(Dataset):
     url = 'http://www.cbsr.ia.ac.cn/users/xiangyuzhu/projects/3DDFA/Database/AFLW2000-3D.zip'
 
@@ -76,7 +76,7 @@ class AFLW2000(Dataset):
             download_and_extract_archive(self.url, self.root)
 
 
-@mlconfig.register
+
 class AFLW2000Loader(DataLoader):
 
     def __init__(self, root, train=True, transform=None, valid_ratio=0.1, download=True, **kwargs):

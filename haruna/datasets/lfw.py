@@ -2,7 +2,7 @@ import os
 from glob import glob
 from pathlib import Path
 
-import mlconfig
+
 from torch.utils.data import DataLoader, Dataset
 from torchvision.datasets.folder import pil_loader
 from torchvision.datasets.utils import download_and_extract_archive
@@ -75,7 +75,7 @@ class LFW(Dataset):
                                          extract_root=self.root)
 
 
-@mlconfig.register
+
 class LFWLoader(DataLoader):
 
     def __init__(self, root, train=True, transform=None, download=False, valid_ratio=0.1, **kwargs):

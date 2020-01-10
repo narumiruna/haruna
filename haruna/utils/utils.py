@@ -2,8 +2,11 @@ import json
 import os
 from collections.abc import Sequence
 
-import yaml
+import numpy as np
+import torch
 from torch import distributed
+
+import yaml
 
 
 def load_yaml(f):
@@ -52,3 +55,9 @@ def find_ext(top, ext):
             paths.append(path)
 
     return paths
+
+
+def manual_seed(seed=0):
+    """https://pytorch.org/docs/stable/notes/randomness.html"""
+    torch.manual_seed(seed)
+    np.random.seed(seed)
