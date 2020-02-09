@@ -1,10 +1,10 @@
 from abc import ABCMeta, abstractproperty
 
 
-def _to_value(other):
-    if isinstance(other, Metric):
-        other = other.value
-    return other
+def _to_value(x):
+    if isinstance(x, Metric):
+        x = x.value
+    return x
 
 
 class Metric(metaclass=ABCMeta):
