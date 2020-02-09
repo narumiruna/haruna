@@ -16,7 +16,6 @@ class AbstractTrainer(metaclass=ABCMeta):
     def train(self):
         raise NotImplementedError
 
-    @abstractmethod
     def evaluate(self):
         raise NotImplementedError
 

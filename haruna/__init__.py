@@ -1,1 +1,4 @@
-from . import datasets, models, optim, trainers, transforms
+from . import metrics
+from . import optim
+from . import transforms
+from . import utils
