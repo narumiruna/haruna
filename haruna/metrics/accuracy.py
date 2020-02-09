@@ -11,10 +11,10 @@ class Accuracy(Metric):
         self.correct = 0
         self.count = 0
 
+    @torch.no_grad()
     def update(self, output: torch.Tensor, target: torch.Tensor):
-        with torch.no_grad():
-            self.correct += output.argmax(dim=1).eq(target).sum().item()
-            self.count += target.numel()
+        self.correct += output.argmax(dim=1).eq(target).sum().item()
+        self.count += target.numel()
 
     @property
     def value(self):
