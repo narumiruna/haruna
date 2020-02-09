@@ -28,8 +28,8 @@ class StandardDeviation(Metric):
     def std(self):
         return math.sqrt(self.var)
 
+    @torch.no_grad()
     def update(self, tensor: torch.Tensor):
-        with torch.no_grad():
-            self.sum += tensor.sum().item()
-            self.squared_sum += tensor.pow(2).sum().item()
-            self.count += tensor.numel()
+        self.sum += tensor.sum().item()
+        self.squared_sum += tensor.pow(2).sum().item()
+        self.count += tensor.numel()
