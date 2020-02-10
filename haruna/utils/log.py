@@ -33,8 +33,8 @@ def get_logger(name: str) -> logging.Logger:
     logger.addHandler(stream_handler)
 
     # file handler
-    today = datetime.now().strftime('%y%m%d')
-    log_file = os.path.join(LOG_DIR, '{}.log'.format(today))
+    now = datetime.now().strftime(DATE_FORMAT)
+    log_file = os.path.join(LOG_DIR, '{}.log'.format(now))
     os.makedirs(LOG_DIR, exist_ok=True)
     file_handler = logging.FileHandler(log_file)
     file_handler.setFormatter(formatter)
