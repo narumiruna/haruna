@@ -35,10 +35,14 @@ def distributed_is_initialized():
     return False
 
 
-def isextension(f, ext):
-    if not isinstance(ext, Sequence):
-        ext = (ext,)
+def to_sequence(x):
+    if not isinstance(x, Sequence):
+        x = (x,)
+    return x
 
+
+def isextension(f, ext):
+    ext = to_sequence(ext)
     return os.path.splitext(f)[1] in ext
 
 
