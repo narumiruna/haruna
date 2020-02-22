@@ -41,7 +41,7 @@ def to_sequence(x):
     return x
 
 
-def isextension(f, ext):
+def is_extension(f, ext):
     ext = to_sequence(ext)
     return os.path.splitext(f)[1] in ext
 
@@ -51,7 +51,7 @@ def list_all(top, ext):
 
     for root, _, files in os.walk(top):
         for f in files:
-            if not isextension(f, ext):
+            if not is_extension(f, ext):
                 continue
 
             path = os.path.join(root, f)
