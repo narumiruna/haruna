@@ -1,5 +1,6 @@
 import json
 import os
+import random
 from collections.abc import Sequence
 
 import numpy as np
@@ -63,3 +64,4 @@ def manual_seed(seed=0):
     """https://pytorch.org/docs/stable/notes/randomness.html"""
     torch.manual_seed(seed)
     np.random.seed(seed)
+    random.seed(seed)
