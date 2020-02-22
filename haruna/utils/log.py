@@ -28,7 +28,8 @@ def get_logger(name: str) -> logging.Logger:
     # stream handler
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
-    stream_level = LEVEL_MAP.get(os.getenv('LOG_LEVEL', 'INFO').upper())
+    log_level = os.getenv('LOG_LEVEL', 'INFO').upper()
+    stream_level = LEVEL_MAP.get(log_level)
     stream_handler.setLevel(stream_level)
     logger.addHandler(stream_handler)
 
