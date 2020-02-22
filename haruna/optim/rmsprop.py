@@ -3,7 +3,6 @@ import torch
 from torch import optim
 
 
-
 class TFRMSprop(optim.Optimizer):
 
     def __init__(self, params, lr=1e-3, weight_decay=1e-5, rho=0.9, eps=1e-3, momentum=0.9, warmup=0):

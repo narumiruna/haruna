@@ -4,9 +4,8 @@ from collections.abc import Sequence
 
 import numpy as np
 import torch
-from torch import distributed
-
 import yaml
+from torch import distributed
 
 
 def load_yaml(f):
