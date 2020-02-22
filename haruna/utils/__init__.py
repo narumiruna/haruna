@@ -1,4 +1,5 @@
 from .log import get_logger
+from .timeit import timeit
 from .utils import distributed_is_initialized
 from .utils import is_extension
 from .utils import list_all
