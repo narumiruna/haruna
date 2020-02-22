@@ -42,7 +42,7 @@ def isextension(f, ext):
     return os.path.splitext(f)[1] in ext
 
 
-def find_ext(top, ext):
+def list_all(top, ext):
     paths = []
 
     for root, _, files in os.walk(top):
