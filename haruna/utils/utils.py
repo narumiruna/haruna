@@ -43,21 +43,20 @@ def to_sequence(x):
 
 def is_extension(f, ext):
     ext = to_sequence(ext)
+    # os.path.splitext(f)[1] is faster than Path(f).suffix
     return os.path.splitext(f)[1] in ext
 
 
-def list_all(top, ext):
-    paths = []
-
+def list_all(top):
     for root, _, files in os.walk(top):
         for f in files:
-            if not is_extension(f, ext):
-                continue
+            yield os.path.join(root, f)
 
-            path = os.path.join(root, f)
-            paths.append(path)
 
-    return paths
+def list_all_ext(top, ext):
+    for f in list_all(top):
+        if is_extension(f, ext):
+            yield f
 
 
 def manual_seed(seed=0):
