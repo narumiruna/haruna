@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "template"
+name = "haruna"
 version = "0.1.0"
 description = ""
 authors = ["narumi <toucans-cutouts0f@icloud.com>"]
@@ -15,7 +15,7 @@ toml = "^0.10.2"
 mypy = "^1.10.0"
 
 [tool.poetry.scripts]
-template = "template.cli:main"
+haruna = "haruna.cli:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
